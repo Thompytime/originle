@@ -18,8 +18,10 @@
 
 1. Create one Redis database in Upstash.
 2. Use the Upstash Vercel integration or copy these into Vercel:
-   - `UPSTASH_REDIS_REST_URL`
-   - `UPSTASH_REDIS_REST_TOKEN`
+   - `KV_REST_API_URL`
+   - `KV_REST_API_TOKEN`
+
+   The backend also accepts `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` if you use a direct Upstash connection instead.
 
 ## 4. Generate secrets
 
@@ -33,8 +35,7 @@ Use a password manager to generate three unrelated random strings of at least 32
 
 Add these to Preview and Production:
 
-- `UPSTASH_REDIS_REST_URL`
-- `UPSTASH_REDIS_REST_TOKEN`
+- `KV_REST_API_URL` and `KV_REST_API_TOKEN` (created automatically by Vercel's Upstash integration), or the equivalent `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`
 - `STRIPE_SECRET_KEY` — use a Stripe test key first.
 - `STRIPE_WEBHOOK_SECRET` — use the test webhook signing secret first.
 - `ADMIN_TOKEN`
