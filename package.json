@@ -1,0 +1,16 @@
+{
+  "name": "originle",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Originle public dating-line boards",
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "@upstash/redis": "^1.35.3",
+    "stripe": "^18.5.0"
+  },
+  "scripts": {
+    "check": "node --check api/_lib.js && node --check api/listings.js && node --check api/checkout.js && node --check api/webhook.js && node --check api/vote.js && node --check api/report.js && node --check api/manage.js && node --check api/checkout-session.js && node --check api/config.js && node --check api/health.js && node --check api/admin/login.js && node --check api/admin/logout.js && node --check api/admin/pending.js && node --check api/admin/moderate.js && node --check api/admin/reports.js && node --check api/admin/report-action.js",
+    "test": "node tests/flows.js",
+    "check:env": "node scripts/check-env.js"
+  }
+}

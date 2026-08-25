@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Originle — Start Bantermogging</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#150E22; --ink-2:#1E1430; --ink-3:#2A1D42;
+  --cream:#F6EEE1; --cream-dim:#B9AFC4;
+  --copper:#C97B3C; --copper-hi:#E8A55E;
+  --neon:#FF3D7F; --mint:#5BE0B4; --amber:#F2C14E;
+  --rule:rgba(246,238,225,.14); --pad:16px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:radial-gradient(900px 500px at 50% -10%,rgba(201,123,60,.20),transparent 60%),
+                radial-gradient(600px 400px at 90% 20%,rgba(255,61,127,.10),transparent 60%),var(--ink);
+  color:var(--cream);font-family:"Space Grotesk",system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;min-height:100dvh;overflow-wrap:anywhere}
+body.modal-open{overflow:hidden}
+.wrap{max-width:860px;margin:0 auto;padding:0 var(--pad) calc(96px + env(safe-area-inset-bottom,0px))}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
+
+/* gate */
+#gate{position:fixed;inset:0;background:var(--ink);z-index:95;display:flex;align-items:center;justify-content:center;padding:24px max(16px,env(safe-area-inset-right,0px)) max(24px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));overflow-y:auto;-webkit-overflow-scrolling:touch}
+#gate .box{width:100%;max-width:440px;text-align:center;margin:auto}
+#gate h1{font-family:"Bungee",sans-serif;font-size:clamp(30px,9vw,44px);margin:0 0 12px;color:var(--copper-hi)}
+#gate p{color:var(--cream-dim);font-size:14px;line-height:1.6;margin:0 0 20px}
+.gate-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.gate-explain{text-align:left;border:1px solid var(--rule);padding:14px;border-radius:3px;margin:16px 0}
+.gate-explain h2{font-family:"Bungee",sans-serif;font-size:15px;color:var(--copper-hi);margin:0 0 6px}
+.gate-explain p{margin:0 0 12px!important}.gate-explain p:last-child{margin-bottom:0!important}
+
+/* header */
+header{padding:26px 0 12px;text-align:center}
+.logo{font-family:"Bungee",sans-serif;font-size:clamp(34px,11vw,60px);line-height:.92;margin:0;letter-spacing:-1px}
+.logo span{color:var(--copper-hi)}
+.strap{font-family:"Space Mono",monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--neon);margin:8px 0 0}
+.tagline{font-size:13px;color:var(--cream-dim);margin:8px 0 0;line-height:1.5}
+.clock{border:1px solid var(--copper);border-radius:3px;margin:20px 0 0;padding:16px;text-align:center;
+  background:linear-gradient(180deg,rgba(201,123,60,.14),transparent)}
+.clock .lab{font-family:"Space Mono",monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--cream-dim)}
+.clock .big{font-family:"Bungee",sans-serif;font-size:clamp(38px,13vw,62px);line-height:1;color:var(--copper-hi);margin:6px 0 4px}
+.clock .next{font-family:"Space Mono",monospace;font-size:12px;color:var(--cream-dim)}
+.clock .next b{color:var(--amber)}
+.stats{display:flex;gap:8px;justify-content:center;margin:14px 0 0;flex-wrap:wrap}
+.stat{border:1px solid var(--rule);border-radius:2px;padding:7px 11px;font-family:"Space Mono",monospace;font-size:11px;color:var(--cream-dim);text-transform:uppercase;letter-spacing:.08em}
+.stat b{color:var(--cream)}
+.tourbtn{margin:16px auto 0;display:block;background:none;border:1px solid var(--mint);color:var(--mint);
+  font-size:13px;padding:10px 16px;border-radius:2px;cursor:pointer}
+.tourbtn:hover{background:rgba(91,224,180,.12)}
+
+/* ticker */
+.ticker{margin:18px 0 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);overflow:hidden;height:34px}
+.ticker[hidden]{display:none}
+.ticker-inner{display:flex;align-items:center;height:34px;gap:34px;white-space:nowrap;animation:slide 36s linear infinite;font-family:"Space Mono",monospace;font-size:11.5px;color:var(--cream-dim)}
+.ticker-inner b{color:var(--copper-hi)}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.ticker-inner{animation:none}}
+
+/* filters */
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:20px 0 0;
+  border:1px solid var(--rule);border-radius:3px;padding:12px}
+.filters .fl{font-family:"Space Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--cream-dim)}
+.filters select{width:auto;min-width:120px;background:var(--ink-3);border:1px solid var(--rule);color:var(--cream);
+  font-family:"Space Grotesk",sans-serif;font-size:16px;padding:8px 10px;border-radius:2px}
+.clearf{background:none;border:0;color:var(--cream-dim);font-size:12px;text-decoration:underline;cursor:pointer;padding:0}
+.clearf:hover{color:var(--cream)}
+
+.boardhead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:18px 0 6px;flex-wrap:wrap}
+.sorts{display:flex;border:1px solid var(--rule);border-radius:2px;overflow:hidden}
+.sort{background:none;border:0;color:var(--cream-dim);font-family:"Space Mono",monospace;font-size:11px;padding:8px 12px;cursor:pointer;text-transform:uppercase;letter-spacing:.06em}
+.sort[aria-pressed="true"]{background:var(--copper);color:var(--ink);font-weight:700}
+.sortnote{font-family:"Space Mono",monospace;font-size:11px;color:var(--cream-dim)}
+
+/* rows */
+ol.board{list-style:none;margin:0;padding:0}
+li.row{border-top:1px solid var(--rule);padding:15px 0;display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:start}
+li.row:last-child{border-bottom:1px solid var(--rule)}
+li.row.mine{background:linear-gradient(90deg,rgba(91,224,180,.10),transparent 70%)}
+li.row.practice{background:linear-gradient(90deg,rgba(242,193,78,.12),transparent 70%)}
+.rank{font-family:"Bungee",sans-serif;font-size:19px;color:var(--copper-hi);text-align:right;line-height:1.15}
+.rank.top{color:var(--neon)}
+.who{font-size:15.5px;font-weight:700}
+.who .meta{font-weight:400;color:var(--cream-dim);font-size:13px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 0}
+.tag{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  border:1px solid var(--rule);color:var(--cream-dim);padding:3px 7px;border-radius:2px}
+.tag.seek{border-color:rgba(255,61,127,.4);color:var(--neon)}
+.tag.prac{border-color:var(--amber);color:var(--amber)}
+.line{font-size:17px;line-height:1.4;font-weight:500;color:var(--cream);margin:0}
+.line::before{content:"\201C";color:var(--copper-hi);margin-right:1px}
+.line::after{content:"\201D";color:var(--copper-hi);margin-left:1px}
+.by{font-size:13px;color:var(--cream-dim);margin:7px 0 0}
+.by b{color:var(--cream);font-weight:700}
+.coins{display:flex;align-items:center;gap:6px;margin:9px 0 0;flex-wrap:wrap}
+.metric{display:inline-flex;gap:5px;align-items:center;border:1px solid var(--rule);padding:4px 7px;border-radius:2px}
+.metric-label{font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--cream-dim)}
+.stack{display:flex}
+.coin{width:11px;height:11px;border-radius:50%;background:linear-gradient(160deg,var(--copper-hi),#8A4E24);box-shadow:inset 0 0 0 1px rgba(0,0,0,.35);margin-left:-3px}
+.coin:first-child{margin-left:0}
+.amount{font-family:"Space Mono",monospace;font-size:12.5px;color:var(--copper-hi);font-weight:700}
+.today{font-family:"Space Mono",monospace;font-size:11.5px;color:var(--amber)}
+.fancies{font-family:"Space Mono",monospace;font-size:12px;color:var(--neon)}
+.contacts{display:flex;gap:8px;flex-wrap:wrap;margin:9px 0 0}
+.contact{display:inline-flex;align-items:center;gap:7px;font-family:"Space Mono",monospace;font-size:12.5px;color:var(--mint);
+  text-decoration:none;border:1px solid rgba(91,224,180,.35);border-radius:2px;padding:5px 9px}
+.contact:hover{background:rgba(91,224,180,.12)}
+.contact .cplat{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--cream-dim)}
+.acts{display:flex;gap:6px;margin:11px 0 0;flex-wrap:wrap}
+.mini{background:none;border:1px solid var(--rule);color:var(--cream-dim);font-size:12px;padding:6px 10px;border-radius:2px;cursor:pointer}
+.mini:hover{border-color:var(--cream);color:var(--cream)}
+.mini.fancy:hover{border-color:var(--neon);color:var(--neon)}
+.mini.boost{border-color:var(--copper);color:var(--copper-hi)}
+.mini.boost:hover{background:var(--copper);color:var(--ink)}
+.mini[disabled]{opacity:.35;cursor:default}
+.empty{border-top:1px solid var(--rule);padding:26px 4px;color:var(--cream-dim);font-size:14px;line-height:1.6;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* buttons */
+.btn{background:var(--copper);color:var(--ink);border:0;font-family:"Bungee",sans-serif;font-size:14px;padding:13px 18px;border-radius:2px;cursor:pointer}
+.btn:hover{background:var(--copper-hi)}
+.btn.ghost{background:none;color:var(--cream-dim);border:1px solid var(--rule);font-family:"Space Grotesk",sans-serif;font-weight:500}
+.btn.ghost:hover{color:var(--cream);border-color:var(--cream)}
+
+/* sticky */
+.sticky{position:fixed;left:0;right:0;bottom:0;background:rgba(21,14,34,.96);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-top:1px solid var(--rule);padding:11px max(var(--pad),env(safe-area-inset-right,0px)) calc(11px + env(safe-area-inset-bottom,0px)) max(var(--pad),env(safe-area-inset-left,0px));z-index:40}
+.sticky-in{max-width:860px;margin:0 auto;display:flex;align-items:center;gap:12px;justify-content:space-between}
+.wallet{font-family:"Space Mono",monospace;font-size:11px;color:var(--cream-dim);line-height:1.45}
+.wallet b{color:var(--mint)}
+
+/* modals */
+.modal{position:fixed;inset:0;background:rgba(10,6,18,.82);z-index:60;display:none;align-items:flex-end;justify-content:center;padding-top:env(safe-area-inset-top,0px)}
+.modal.open{display:flex}
+.sheet{background:var(--ink-2);border-top:2px solid var(--copper);width:100%;max-width:560px;padding:22px max(var(--pad),env(safe-area-inset-right,0px)) calc(28px + env(safe-area-inset-bottom,0px)) max(var(--pad),env(safe-area-inset-left,0px));max-height:93vh;max-height:93dvh;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;border-radius:6px 6px 0 0}
+.sheet h2{font-family:"Bungee",sans-serif;font-size:21px;margin:0 0 4px}
+.sheet p.sub{color:var(--cream-dim);font-size:13px;margin:0 0 16px;line-height:1.55}
+label{display:block;font-family:"Space Mono",monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--cream-dim);margin:14px 0 6px}
+input,select,textarea{width:100%;background:var(--ink-3);border:1px solid var(--rule);color:var(--cream);font-family:"Space Grotesk",sans-serif;font-size:16px;padding:11px 12px;border-radius:2px}
+textarea{resize:none;line-height:1.45}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.count{font-family:"Space Mono",monospace;font-size:11px;color:var(--cream-dim);text-align:right;margin-top:5px}
+.hint{font-size:12px;color:var(--cream-dim);margin:6px 0 0;line-height:1.5}
+.paybox{border:1px dashed var(--copper);border-radius:2px;padding:14px;margin:16px 0 4px;text-align:center}
+.paybox .big{font-family:"Bungee",sans-serif;font-size:30px;color:var(--copper-hi);line-height:1}
+.paybox .cap{font-family:"Space Mono",monospace;font-size:11px;color:var(--cream-dim);margin-top:6px}
+.consents{border-top:1px solid var(--rule);margin-top:16px;padding-top:12px}
+.chk{display:flex;gap:10px;align-items:flex-start;margin:11px 0;font-size:12.5px;line-height:1.45;color:var(--cream-dim)}
+.chk input{width:18px;height:18px;flex:0 0 18px;margin-top:1px;accent-color:var(--mint)}
+.chk b{color:var(--cream)}
+.err{color:var(--neon);font-size:12.5px;margin:10px 0 0;min-height:16px;line-height:1.45}
+.sheet-acts{display:flex;gap:8px;margin-top:16px}
+.sheet-acts .btn{flex:1}
+.pbanner{border:1px solid var(--amber);background:rgba(242,193,78,.1);color:var(--amber);border-radius:2px;
+  padding:9px 11px;font-family:"Space Mono",monospace;font-size:11.5px;margin:0 0 14px;line-height:1.5}
+
+/* moderation */
+/* legal */
+.legal h3{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--copper-hi);margin:20px 0 8px}
+.legal p,.legal li{font-size:13px;line-height:1.65;color:var(--cream-dim)}
+.legal ol,.legal ul{padding-left:18px;margin:0}
+.legal li{margin-bottom:6px}
+.legaltabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.ltab{background:none;border:1px solid var(--rule);color:var(--cream-dim);font-size:12px;padding:7px 10px;border-radius:2px;cursor:pointer}
+.ltab[aria-selected="true"]{background:var(--cream);color:var(--ink);font-weight:700}
+
+footer{border-top:1px solid var(--rule);margin-top:34px;padding:22px 0 10px;color:var(--cream-dim);font-size:12.5px;line-height:1.65}
+footer h3{font-family:"Space Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--cream);margin:0 0 8px}
+footer ol{padding-left:18px;margin:0}
+footer li{margin-bottom:5px}
+.flinks{display:flex;gap:14px;flex-wrap:wrap;margin-top:16px}
+.flinks button{background:none;border:0;color:var(--cream-dim);font-size:12.5px;text-decoration:underline;cursor:pointer;padding:0}
+.flinks button:hover{color:var(--cream)}
+.smallprint{margin-top:14px;font-size:11px;opacity:.65;line-height:1.6}
+
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:82px;background:var(--cream);color:var(--ink);font-size:13.5px;font-weight:700;padding:11px 15px;border-radius:2px;z-index:80;opacity:0;pointer-events:none;transition:opacity .25s;max-width:88vw;text-align:center}
+#toast.show{opacity:1}
+
+/* ---------- walk-through ---------- */
+/* pointer-events:none is load-bearing: the dim covers the whole viewport, so
+   without it every click during the tour hits the overlay instead of the page. */
+#tourDim{position:fixed;inset:0;z-index:70;display:none;pointer-events:none}
+#tourDim.on{display:block}
+#spot{position:absolute;border-radius:4px;box-shadow:0 0 0 9999px rgba(10,6,18,.86),0 0 0 2px var(--mint);
+  transition:all .28s ease;pointer-events:none}
+@media (prefers-reduced-motion:reduce){#spot{transition:none}}
+#tourCard{position:fixed;z-index:75;left:50%;transform:translateX(-50%);width:min(520px,calc(100vw - 24px));
+  background:var(--ink-2);border:1px solid var(--mint);border-radius:4px;padding:16px 16px 14px;display:none;
+  max-height:min(60vh,420px);max-height:min(60dvh,420px);overflow:auto;-webkit-overflow-scrolling:touch}
+#tourCard.on{display:block}
+#tourCard .step{font-family:"Space Mono",monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mint)}
+#tourCard h4{font-family:"Bungee",sans-serif;font-size:16px;margin:6px 0 6px;color:var(--cream)}
+#tourCard p{font-size:13.5px;line-height:1.6;color:var(--cream-dim);margin:0}
+#tourCard p b{color:var(--cream)}
+.tournav{display:flex;gap:8px;align-items:center;margin-top:14px}
+.tournav .grow{flex:1}
+.tbtn{background:none;border:1px solid var(--rule);color:var(--cream-dim);font-size:13px;padding:9px 13px;border-radius:2px;cursor:pointer}
+.tbtn:hover{color:var(--cream);border-color:var(--cream)}
+.tbtn.go{background:var(--mint);border-color:var(--mint);color:var(--ink);font-weight:700}
+.tbtn.go:hover{background:#7ff0c9}
+.pribbon{position:fixed;top:0;left:0;right:0;z-index:76;background:var(--amber);color:var(--ink);
+  font-family:"Space Mono",monospace;font-size:11.5px;text-align:center;padding:6px 10px;display:none}
+.pribbon.on{display:block}
+.pribbon button{background:none;border:0;color:var(--ink);text-decoration:underline;font-weight:700;cursor:pointer;font-size:11.5px}
+@media (max-width:520px){
+  :root{--pad:12px}
+  #gate{align-items:flex-start}
+  .gate-explain{padding:12px}
+  .two{grid-template-columns:1fr}
+  .filters{align-items:stretch}
+  .filters .fl{width:100%}
+  .filters select{width:100%;min-height:44px}
+  .boardhead{align-items:stretch}
+  .sorts{width:100%;display:grid;grid-template-columns:repeat(3,1fr)}
+  .sort{padding:10px 5px;white-space:normal}
+  li.row{grid-template-columns:32px minmax(0,1fr);gap:9px}
+  .sticky-in{gap:8px}.sticky .btn{padding:12px 13px;font-size:12px}
+  .wallet{font-size:10px}
+  .sheet-acts{position:sticky;bottom:0;background:var(--ink-2);padding:10px 0 2px;z-index:2}
+}
+@media (min-width:700px){
+  .modal{align-items:center;padding:24px}
+  .sheet{border:1px solid var(--copper);border-top-width:2px;border-radius:6px;max-height:calc(100vh - 48px);max-height:calc(100dvh - 48px)}
+}
+@media (pointer:coarse){
+  .btn,.mini,.sort,.tourbtn,.tbtn,.ltab,.clearf,.flinks button{min-height:44px}
+}
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="box">
+    <h1>ORIGINLE</h1>
+    <p>Post one original dating line and a public profile where people can find you.</p>
+    <p><b>Pay to climb the main board, or win Most Bantermogged on wit alone. No photos. No DMs.</b></p>
+    <p><b>Start Bantermogging.</b></p>
+    <div class="gate-explain">
+      <h2>What is Bantermogging?</h2>
+      <p>Bantermogging is using an attractive, creative and funny dating line that outperforms the competition. For example: “First round is on me if you can beat me at pool.”</p>
+      <h2>Why does it need to be original?</h2>
+      <p>The same line cannot be posted twice. The more original it is, the more likely people are to rate it. We have all seen the usual pick-up lines before.</p>
+    </div>
+    <p>No photos. No private messaging. No phone numbers or email addresses, ever. Just your line and a public profile or website where you can be reached.</p>
+    <div class="gate-btns">
+      <button class="btn" id="gateYes">I'm 18 or over</button>
+      <button class="btn ghost" id="gateNo">I'm under 18</button>
+    </div>
+  </div>
+</div>
+
+<div class="pribbon" id="pribbon">
+  Practice mode — nothing here is real. <button id="endPractice">Leave practice</button>
+</div>
+
+<div class="wrap" id="app" hidden>
+
+  <header>
+    <h1 class="logo">ORIGIN<span>LE</span></h1>
+    <p class="strap">Bantermog your way onto the front page.</p>
+    <p class="tagline">Write one original dating line. The best lines climb the Most Mogged board. The top post on the page is always for sale.</p>
+
+    <div class="clock" id="t-clock">
+      <div class="lab">Today's price for a new listing</div>
+      <div class="big" id="priceBig">£1</div>
+      <div class="next">Goes up to <b id="priceNext">£2</b> in <b id="countdown">00:00:00</b> · Originle day <b id="dayNo">1</b></div>
+    </div>
+
+    <div class="stats" id="t-stats">
+      <div class="stat">On the board <b id="sCount">—</b></div>
+      <div class="stat">Board value <b id="sValue">—</b></div>
+      <div class="stat">Mogs given <b id="sFancy">—</b></div>
+    </div>
+
+    <button class="tourbtn" id="startTour">New here? Walk me through it →</button>
+  </header>
+
+  <div class="ticker" id="practiceTicker" hidden><div class="ticker-inner" id="ticker"></div></div>
+
+  <div class="filters" id="t-filters">
+    <span class="fl">Show me</span>
+    <select id="fltGender">
+      <option value="">everyone</option>
+      <option value="w">women</option>
+      <option value="m">men</option>
+      <option value="nb">non-binary people</option>
+    </select>
+    <span class="fl">looking for</span>
+    <select id="fltSeek">
+      <option value="">anyone</option>
+      <option value="w">women</option>
+      <option value="m">men</option>
+      <option value="any">everyone</option>
+    </select>
+    <button class="clearf" id="clearFilters">clear</button>
+  </div>
+
+  <div class="boardhead">
+    <div class="sorts" id="t-sorts">
+      <button class="sort" data-sort="all" aria-pressed="true">All time</button>
+      <button class="sort" data-sort="today" aria-pressed="false">Today</button>
+      <button class="sort" data-sort="fancy" aria-pressed="false">Most Mogged</button>
+    </div>
+    <div class="sortnote" id="sortnote">Ranked by everything paid. Ties go to whoever got here first.</div>
+  </div>
+
+  <ol class="board" id="board"></ol>
+
+  <footer>
+    <h3>How it works</h3>
+    <ol>
+      <li>A listing costs <b id="footPrice">£1</b> today. The price goes up by £1 every midnight, for everyone, for good.</li>
+      <li>Rank is the total you've paid, across the whole board. Ties go to whoever got here first.</li>
+      <li>Pay more any time to climb. Nothing you've already paid is taken away.</li>
+      <li>Say what you are and who you're after. Filters do the rest — there's one board and one number one. Get passed and you've been bantermogged.</li>
+      <li>Three ways to rank: all time, today only, and <b>Most Mogged</b> — the last one is decided by other visitors and is included with your original listing fee.</li>
+      <li>One original line, plus a handle, a link, or both. No photos, no inbox, no phone numbers, no email addresses.</li>
+      <li>Every new listing, line, handle and link is vetted by a moderator before it appears.</li>
+      <li>Your listing, your call — delete it whenever you like, in one click.</li>
+    </ol>
+    <div class="flinks">
+      <button data-legal="terms">Terms</button>
+      <button data-legal="privacy">Privacy</button>
+      <button data-legal="rules">Community rules</button>
+      <button data-legal="report">Complaints &amp; takedown</button>
+      <button data-legal="who">Who runs this</button>
+    </div>
+    <p class="smallprint">18+ only. No photos, private messages, phone numbers or email addresses.</p>
+  </footer>
+</div>
+
+<!-- NEW LISTING -->
+<div class="modal" id="modalNew" role="dialog" aria-modal="true" aria-labelledby="newTitle">
+  <div class="sheet">
+    <div class="pbanner" id="newPracticeBanner" hidden>Practice run — no card is touched and this listing disappears when you leave.</div>
+    <h2 id="newTitle">Get on the board</h2>
+    <p class="sub">The line is the whole thing. Write something nobody else would have written and people can mog it — there is nowhere to put a photo, so the words are all you have.</p>
+
+    <div class="two">
+      <div><label for="fName">First name</label><input id="fName" maxlength="14" placeholder="Gaz" autocomplete="off"></div>
+      <div><label for="fAge">Age</label><input id="fAge" type="number" min="18" max="99" placeholder="34"></div>
+    </div>
+
+    <label for="fArea">Town or area</label>
+    <input id="fArea" maxlength="18" placeholder="Rainham" autocomplete="off">
+
+    <label for="fCountry">Country</label>
+    <input id="fCountry" maxlength="40" placeholder="UK" autocomplete="country-name">
+
+    <div class="two">
+      <div><label for="fGender">You are</label>
+        <select id="fGender">
+          <option value="w">a woman</option>
+          <option value="m">a man</option>
+          <option value="nb">non-binary</option>
+        </select>
+      </div>
+      <div><label for="fSeek">Looking for</label>
+        <select id="fSeek">
+          <option value="w">women</option>
+          <option value="m">men</option>
+          <option value="any">everyone</option>
+        </select>
+      </div>
+    </div>
+
+    <label for="fPitch">Your line</label>
+    <textarea id="fPitch" rows="5" maxlength="500" placeholder="Owns a van. Will help you move. That's the whole pitch."></textarea>
+    <div class="count"><span id="pitchCount">0</span>/500</div>
+    <p class="hint">Best ones are specific and true. "Owns a van, will help you move" beats "love to laugh and have fun" every single time.</p>
+
+    <label>Where people can reach you</label>
+    <p class="hint" style="margin:0 0 10px">A handle, a link, or both — at least one. No phone numbers and no email addresses.</p>
+    <div class="two">
+      <div><select id="fPlat"></select></div>
+      <div><input id="fHandle" maxlength="30" placeholder="username" autocomplete="off"></div>
+    </div>
+    <div class="count" id="handlePrev">&nbsp;</div>
+
+    <label for="fLink">Or a link — profile, Linktree, your own site</label>
+    <input id="fLink" maxlength="120" placeholder="linktr.ee/gazdoesvans" autocomplete="off" inputmode="url">
+    <p class="hint">Anything you link to gets opened and read by a moderator before you go live, same as your line.</p>
+
+    <label for="fSpend">Pay</label>
+    <select id="fSpend"></select>
+
+    <div class="paybox">
+      <div class="big" id="payBig">£1</div>
+      <div class="cap">In this practice version, no card is requested and nothing costs money.</div>
+    </div>
+
+    <div class="consents">
+      <label class="chk"><input type="checkbox" id="c1"><span>I'm <b>18 or over</b> and this listing is <b>about me</b>. I'm not listing anyone else.</span></label>
+      <label class="chk"><input type="checkbox" id="c2"><span>The handle or link is <b>mine</b> and I'm happy for it to be public.</span></label>
+      <label class="chk"><input type="checkbox" id="c3"><span>I <b>consent to this being published</b>, including who I'm looking for — which can indicate my sexual orientation. I can delete it at any time.</span></label>
+      <label class="chk"><input type="checkbox" id="c4"><span>I want it published <b>as soon as it's approved</b>, and I understand that once it's live I lose my 14-day right to cancel.</span></label>
+    </div>
+
+    <p class="err" id="newErr"></p>
+    <div class="sheet-acts">
+      <button class="btn ghost" data-close>Back out</button>
+      <button class="btn" id="doAdd">Pay &amp; submit</button>
+    </div>
+  </div>
+</div>
+
+<!-- BOOST -->
+<div class="modal" id="modalBoost" role="dialog" aria-modal="true" aria-labelledby="boostTitle">
+  <div class="sheet">
+    <h2 id="boostTitle">Climb</h2>
+    <p class="sub" id="boostSub"></p>
+    <label for="bAmt">Add</label><select id="bAmt"></select>
+    <div class="paybox"><div class="big" id="boostBig">—</div><div class="cap" id="boostCap"></div></div>
+    <p class="err" id="boostErr"></p>
+    <div class="sheet-acts">
+      <button class="btn ghost" data-close>Leave it</button>
+      <button class="btn" id="doBoost">Pay &amp; climb</button>
+    </div>
+  </div>
+</div>
+
+<!-- REPORT -->
+<div class="modal" id="modalReport" role="dialog" aria-modal="true" aria-labelledby="repTitle">
+  <div class="sheet">
+    <h2 id="repTitle">Report a listing</h2>
+    <p class="sub" id="repSub"></p>
+    <label for="repWhy">What's wrong with it</label>
+    <select id="repWhy">
+      <option>This is me and I didn't post it</option>
+      <option>It's someone I know who hasn't consented</option>
+      <option>The person is under 18</option>
+      <option>Sexual or explicit content</option>
+      <option>Abuse, harassment or a threat</option>
+      <option>Scam, spam or a fake account</option>
+      <option>Something illegal</option>
+      <option>Something else</option>
+    </select>
+    <label for="repMore">Anything else we should know (optional)</label>
+    <textarea id="repMore" rows="3" maxlength="400" placeholder="Optional"></textarea>
+    <p class="hint">Reports about you or about a child are taken down first and reviewed after. Everything else is read by a person, and we'll tell you what we did.</p>
+    <div class="sheet-acts">
+      <button class="btn ghost" data-close>Cancel</button>
+      <button class="btn" id="doReport">Send report</button>
+    </div>
+  </div>
+</div>
+
+<!-- MINE -->
+<div class="modal" id="modalMine" role="dialog" aria-modal="true" aria-labelledby="mineTitle">
+  <div class="sheet">
+    <h2 id="mineTitle">Your listing</h2>
+    <p class="sub" id="mineSub"></p>
+    <div class="sheet-acts" style="flex-direction:column">
+      <button class="btn ghost" id="mineBoost">Pay more and climb</button>
+      <button class="btn ghost" id="mineDelete" style="border-color:var(--neon);color:var(--neon)">Delete my listing now</button>
+      <button class="btn ghost" data-close>Close</button>
+    </div>
+    <p class="hint">Deleting is instant and permanent. We keep the payment record because we have to for tax and fraud, but the listing text and handle go straight away.</p>
+  </div>
+</div>
+
+<!-- LEGAL -->
+<div class="modal" id="modalLegal" role="dialog" aria-modal="true" aria-labelledby="legalTitle">
+  <div class="sheet">
+    <h2 id="legalTitle">The boring but necessary bit</h2>
+    <div class="legaltabs" id="legaltabs"></div>
+    <div class="legal" id="legalBody"></div>
+    <div class="sheet-acts"><button class="btn ghost" data-close>Close</button></div>
+  </div>
+</div>
+
+<div class="sticky">
+  <div class="sticky-in">
+    <div class="wallet">Listing today <b id="wPrice">£1</b><br><span id="wLeft">5 mogs left today</span></div>
+    <button class="btn" id="openNew">Get on the board →</button>
+  </div>
+</div>
+
+<div id="tourDim"><div id="spot"></div></div>
+<div id="tourCard" role="dialog" aria-live="polite">
+  <div class="step" id="tourStep">Step 1 of 12</div>
+  <h4 id="tourTitle"></h4>
+  <p id="tourText"></p>
+  <div class="tournav">
+    <button class="tbtn" id="tourSkip">Skip</button>
+    <span class="grow"></span>
+    <button class="tbtn" id="tourBack">Back</button>
+    <button class="tbtn go" id="tourNext">Next</button>
+  </div>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ================= price ladder ================= */
+/* Change this date when the real business launches. */
+var LAUNCH=new Date("2026-08-25T00:00:00"); LAUNCH.setHours(0,0,0,0);
+var RUNTIME={serverPrice:null,publicSubmissionsEnabled:false,paymentsEnabled:false,loaded:false};
+function dayNumber(){ var t=new Date(); t.setHours(0,0,0,0); return Math.floor((t-LAUNCH)/86400000)+1; }
+function todayPrice(){ return RUNTIME.serverPrice===null?dayNumber()*100:RUNTIME.serverPrice; }
+function msToMidnight(){ var m=new Date(); m.setHours(24,0,0,0); return m-new Date(); }
+
+/* ================= vocabulary ================= */
+var GENDER={w:"Woman",m:"Man",nb:"Non-binary"};
+var SEEK={w:"Looking for women",m:"Looking for men",any:"Looking for everyone"};
+
+var PLATFORMS=[
+ {id:"instagram",label:"Instagram",pre:"instagram.com/",fmt:function(h){return "https://instagram.com/"+h;}},
+ {id:"x",label:"X",pre:"x.com/",fmt:function(h){return "https://x.com/"+h;}},
+ {id:"tiktok",label:"TikTok",pre:"tiktok.com/@",fmt:function(h){return "https://tiktok.com/@"+h;}},
+ {id:"bluesky",label:"Bluesky",pre:"bsky.app/profile/",fmt:function(h){return "https://bsky.app/profile/"+h;}},
+ {id:"threads",label:"Threads",pre:"threads.net/@",fmt:function(h){return "https://threads.net/@"+h;}},
+ {id:"snapchat",label:"Snapchat",pre:"snapchat.com/add/",fmt:function(h){return "https://snapchat.com/add/"+h;}},
+ {id:"reddit",label:"Reddit",pre:"reddit.com/user/",fmt:function(h){return "https://reddit.com/user/"+h;}},
+ {id:"letterboxd",label:"Letterboxd",pre:"letterboxd.com/",fmt:function(h){return "https://letterboxd.com/"+h;}},
+ {id:"strava",label:"Strava",pre:"strava.com/athletes/",fmt:function(h){return "https://strava.com/athletes/"+h;}},
+ {id:"site",label:"Your own site",pre:"",fmt:function(h){return "https://"+h.replace(/^https?:\/\//,"");}}
+];
+var HANDLE_OK=/^[A-Za-z0-9._\-\/]{2,30}$/;
+var EMAIL_RE=/[A-Za-z0-9._%+-]+\s*(@|\(at\)|\[at\])\s*[A-Za-z0-9.-]+\.[A-Za-z]{2,}/i;
+var PHONE_RE=/(?:\+?\d[\s().-]?){9,}/;
+var CONTACT_WORDS=/\b(whats?app|wa\.me|telegram|t\.me|signal|kik|viber|text me|call me|my number|email me|gmail|hotmail|outlook|yahoo|proton)\b/i;
+var SHORTENERS=["bit.ly","tinyurl.com","t.co","goo.gl","ow.ly","is.gd","cutt.ly","rb.gy","shorturl.at"];
+var LINK_HOSTS=["instagram.com","x.com","twitter.com","tiktok.com","bsky.app","threads.net","snapchat.com",
+ "reddit.com","letterboxd.com","strava.com","linktr.ee","beacons.ai","youtube.com","twitch.tv",
+ "substack.com","medium.com","github.com","linkedin.com","spotify.com"];
+function tidyLink(u){ return u.indexOf("http")===0?u:"https://"+u; }
+function hostOf(u){ try{ return new URL(tidyLink(u)).hostname.replace(/^www\./,""); }catch(e){ return u; } }
+function linkOk(u){
+ var url; try{ url=new URL(tidyLink(u)); }catch(e){ return false; }
+ if(url.protocol!=="https:") return false;
+ var h=url.hostname.replace(/^www\./,"");
+ if(SHORTENERS.indexOf(h)>-1) return false;
+ if(/^\d+\.\d+\.\d+\.\d+$/.test(h)) return false;
+ if(LINK_HOSTS.indexOf(h)>-1) return true;
+ return /^[a-z0-9-]+(\.[a-z0-9-]+)+$/i.test(h);
+}
+
+/* ================= practice-only sample board ================= */
+/* gender, seeking, name, age, area, country, line, platform, handle, link, total, today, mogs */
+var seedRaw=[
+ ["m","w","Gaz",34,"Romford","UK","Owns a van. Will help you move. That's the whole pitch.","instagram","gaz.does.vans",null,1200,300,88],
+ ["w","m","Priya",29,"Ilford","UK","Reads the terms and conditions. Won't read your mixed signals.","x","priyareadsall",null,1500,400,241],
+ ["w","w","Marta",35,"Wanstead","UK","Carpenter. Built the shelf you keep meaning to build.","instagram","marta.builds",null,1300,500,164],
+ ["m","m","Adrian",38,"Shoreditch","Runs a supper club out of a flat with one hob.",null,null,"linktr.ee/adrianonehob",1100,0,177],
+ ["nb","any","Alex",32,"Hackney","Bakes bread nobody asked for. You'll be fine about it.","instagram","alex.proves",null,1000,200,153],
+ ["w","m","Joyce",58,"Upminster","Sorted, not sad. Bring a coat, we're going out.","instagram","joyce.goes.out",null,900,200,158],
+ ["m","w","Femi",36,"Walthamstow","Six foot four. Absolutely terrified of the dentist.","x","femi_tall",null,800,800,203],
+ ["m","m","Kwame",30,"Leyton","Sings in a choir. Loudly. In the car. Alone.","tiktok","kwamesings",null,700,300,142],
+ ["w","m","Nadia",26,"Stratford","Fluent in three languages, silent in all of them before nine.","bluesky","nadia.bsky.social",null,600,600,196],
+ ["w","w","Cerys",28,"Poplar","Knows every bus route in Zone 2. Uses none of them.","letterboxd","cerys",null,600,0,127],
+ ["m","w","Ray",62,"Hornchurch","Restores clocks. Never late. Make of that what you will.","site","raymondstickings.co.uk",null,500,0,41],
+ ["m","m","Stu",44,"Brentwood","Restores motorbikes and then refuses to ride them.","reddit","stu_polishes",null,400,100,58],
+ ["nb","any","Rowan",27,"Leytonstone","Night shift. Free on Tuesdays for ever.","bluesky","rowan.bsky.social",null,400,400,88],
+ ["m","w","Danny",29,"Barking","Beat me at pool and I'll propose on the spot.","instagram","dannypots",null,300,100,17],
+ ["w","m","Dee",33,"Barking","Owns a boat. It's a kayak. It is still a boat.","strava","44821903","dee-kayaks.co.uk",300,0,73],
+ ["w","w","Ines",41,"Ilford","Two rescue greyhounds. They come first, sorry.","instagram","ines.and.dogs",null,300,300,109],
+ ["w","m","Ellie",24,"Southend","Will beat you at pool and be smug about it for a week.","tiktok","elliepockets",null,200,200,131],
+ ["w","w","Fay",23,"Romford","Pub quiz captain. Ruthless. Takes it far too seriously.","x","fayknows",null,200,0,71],
+ ["m","m","Ben",26,"Bow","Six-a-side goalkeeper. Emotionally, also a goalkeeper.","x","ben_saves",null,200,200,96],
+ ["m","w","Owen",45,"Grays","Two air fryers, one heart, no notes.","threads","owenfries",null,100,100,64],
+ ["m","w","Sol",27,"Hackney","Makes the good coffee. Will not make it before eight.","instagram","sol.grinds",null,100,0,112],
+ ["w","m","Mo",31,"Dagenham","Can parallel park first go. Every single time.","instagram","mo.parks",null,100,0,29],
+ ["w","w","Jan",57,"Rainham","Sea swims all year. Yes, even then. Especially then.","strava","10394882",null,100,100,48],
+ ["m","m","Rob",52,"Chelmsford","Grows tomatoes. Talks about the tomatoes. Sorry.",null,null,"robstoms.uk",100,0,34],
+ ["nb","any","Sam",39,"Barking","Open, honest, hopeless at texting back. Ring the bell.","reddit","sam_eventually",null,100,0,52]
+];
+var idc=1;
+var practiceSeed=seedRaw.map(function(s,i){
+ var hasCountry=s.length===13, x=hasCountry?1:0;
+ return {id:idc++,gender:s[0],seek:s[1],name:s[2],age:s[3],area:s[4],country:hasCountry?s[5]:"UK",pitch:s[5+x],
+         plat:s[6+x],handle:s[7+x],link:s[8+x],pence:s[9+x],todayPence:s[10+x],fancies:s[11+x],
+         seq:i,mine:false,voted:0,status:"live",practice:true};
+ });
+var listings=[];
+var liveCache=[];
+var state={sort:"all",fltGender:"",fltSeek:"",fanciesLeft:5,boostId:null,reportId:null,mineId:null,legal:"terms"};
+
+/* ================= helpers ================= */
+function money(p){ return p<100?p+"p":"£"+(p/100).toFixed(2).replace(/\.00$/,""); }
+function el(id){ return document.getElementById(id); }
+function esc(s){ return String(s).replace(/[<>&"]/g,function(c){
+ return {"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;"}[c];}); }
+function plat(id){ for(var i=0;i<PLATFORMS.length;i++) if(PLATFORMS[i].id===id) return PLATFORMS[i]; return PLATFORMS[0]; }
+function live(){ return listings.filter(function(l){ return l.status==="live"; }); }
+function sortField(){ return state.sort==="fancy"?"fancies":state.sort==="today"?"todayPence":"pence"; }
+/* One board, one number one. Rank is global; filters only decide what you see. */
+function rankedAll(){
+ var f=sortField();
+ return live().slice().sort(function(a,b){ return b[f]-a[f] || a.seq-b.seq; });
+}
+function visible(){
+ return rankedAll().map(function(l,i){ return {l:l,rank:i+1}; })
+  .filter(function(r){
+   if(state.fltGender && r.l.gender!==state.fltGender) return false;
+   if(state.fltSeek && r.l.seek!==state.fltSeek) return false;
+   return true;
+  });
+}
+function toast(m){ var t=el("toast"); t.textContent=m; t.classList.add("show");
+ clearTimeout(t._h); t._h=setTimeout(function(){t.classList.remove("show");},2600); }
+function ref(){ return "OM-"+Math.random().toString(36).slice(2,7).toUpperCase(); }
+
+/* ================= render ================= */
+function renderClock(){
+ var p=todayPrice();
+ el("priceBig").textContent=money(p); el("priceNext").textContent=money(p+100);
+ el("dayNo").textContent=dayNumber(); el("footPrice").textContent=money(p); el("wPrice").textContent=money(p);
+ var ms=msToMidnight(),h=Math.floor(ms/3600000),m=Math.floor(ms%3600000/60000),s=Math.floor(ms%60000/1000);
+ el("countdown").textContent=[h,m,s].map(function(n){return String(n).padStart(2,"0");}).join(":");
+}
+function coinStack(p){
+ var n=Math.max(1,Math.min(22,Math.round(Math.sqrt(p/100)*3)));
+ var o='<span class="stack">'; for(var i=0;i<n;i++) o+='<span class="coin"></span>'; return o+"</span>";
+}
+function contactHTML(l){
+ var out="";
+ if(l.handle){ var P=plat(l.plat);
+  out+='<a class="contact" href="'+esc(P.fmt(l.handle))+'" target="_blank" rel="noopener noreferrer nofollow">'+
+       '<span class="cplat">'+esc(P.label)+'</span>'+esc("@"+l.handle)+' ↗</a>'; }
+ if(l.link){
+  out+='<a class="contact" href="'+esc(tidyLink(l.link))+'" target="_blank" rel="noopener noreferrer nofollow">'+
+       '<span class="cplat">Link</span>'+esc(hostOf(l.link))+' ↗</a>'; }
+ return out?'<div class="contacts">'+out+"</div>":"";
+}
+function renderBoard(){
+ var rows=visible();
+ if(!rows.length){
+  if(!live().length&&!state.fltGender&&!state.fltSeek){
+   el("board").innerHTML='<li class="empty">No approved listings yet.</li>';
+  } else {
+   el("board").innerHTML='<li class="empty">Nothing under that filter. '+
+    '<button class="clearf" data-act="clear">Show everyone</button></li>';
+  }
+ } else {
+  el("board").innerHTML=rows.map(function(r){
+   var l=r.l;
+   return '<li class="row'+(l.mine?" mine":"")+(l.practice?" practice":"")+'" data-row="'+l.id+'">'+
+    '<div class="rank'+(r.rank===1?" top":"")+'">'+r.rank+"</div><div>"+
+     '<p class="line">'+esc(l.pitch)+"</p>"+
+     '<div class="by"><b>'+esc(l.name)+"</b>, "+l.age+" · "+esc(l.area)+", "+esc(l.country||"UK")+(l.mine?" · that's you":"")+"</div>"+
+     '<div class="tags"><span class="tag">'+GENDER[l.gender]+'</span><span class="tag seek">'+SEEK[l.seek]+"</span>"+
+       (l.practice?'<span class="tag prac">Practice</span>':"")+"</div>"+
+     '<div class="coins"><span class="metric"><span class="metric-label">Board total</span><span class="amount">'+money(l.pence)+"</span></span>"+
+       (l.todayPence?'<span class="metric"><span class="metric-label">Added today</span><span class="today">'+money(l.todayPence)+"</span></span>":"")+
+       '<span class="metric"><span class="metric-label">Mogs</span><span class="fancies">◆ '+l.fancies+"</span></span></div>"+
+     contactHTML(l)+
+     '<div class="acts">'+
+      '<button class="mini fancy" data-act="fancy" data-id="'+l.id+'"'+(l.voted===1?" disabled":"")+">"+(l.voted===1?"Mogged":"Mog this")+"</button>"+
+      '<button class="mini" data-act="nope" data-id="'+l.id+'"'+(l.voted===-1?" disabled":"")+">"+(l.voted===-1?"Passed":"Keep scrolling")+"</button>"+
+      (l.mine?'<button class="mini boost" data-act="mine" data-id="'+l.id+'">Manage</button>'
+             :'<button class="mini boost" data-act="boost" data-id="'+l.id+'">Boost them</button>')+
+      '<button class="mini" data-act="report" data-id="'+l.id+'">Report</button>'+
+     "</div></div></li>";}).join("");
+ }
+ var notes={all:"Ranked by everything paid. Ties go to whoever got here first.",
+  today:"Ranked by what's been paid since midnight. Resets every night.",
+  fancy:"Ranked purely on the line. Included with your listing and free to win."};
+ el("sortnote").textContent=notes[state.sort];
+}
+function renderStats(){
+ var L=live().filter(function(l){ return !l.practice; });
+ el("sCount").textContent=L.length;
+ el("sValue").textContent=money(L.reduce(function(a,l){return a+l.pence;},0));
+ el("sFancy").textContent=L.reduce(function(a,l){return a+l.fancies;},0).toLocaleString("en-GB");
+ el("wLeft").textContent=state.fanciesLeft+(state.fanciesLeft===1?" mog left today":" mogs left today");
+}
+var events=[
+ "<b>Priya, 29</b> is #1 on the whole board with £15",
+ "A listing costs <b>£1 more</b> at midnight than it does now",
+ "<b>Sol, 27</b> has spent £1 and is <b>#1 on Most Mogged</b>",
+ "<b>Marta, 35</b> put another £5 in and bantermogged four people",
+ "Three listings <b>rejected</b> today — handles that weren't theirs",
+ "<b>Rob, 52</b> is bottom of the page and appears at peace with it",
+ "<b>Most Mogged</b> is included with every listing."
+];
+function renderTicker(){ var l=events.map(function(e){return "<span>"+e+"</span>";}).join(""); el("ticker").innerHTML=l+l; }
+function renderAll(){ renderBoard(); renderStats(); }
+
+/* ================= gate ================= */
+el("gateYes").onclick=function(){ el("gate").style.display="none"; el("app").hidden=false; setTimeout(TOUR.start,150); };
+el("gateNo").onclick=function(){ el("gate").innerHTML=
+ '<div class="box"><h1>Please leave the site</h1><p>This is an over-18s site.</p>'+
+ '<p class="smallprint">If someone under 18 is on the board, report it and we\'ll take it down.</p></div>'; };
+
+/* ================= filters & sorts ================= */
+el("fltGender").onchange=function(){ state.fltGender=this.value; renderBoard(); };
+el("fltSeek").onchange=function(){ state.fltSeek=this.value; renderBoard(); };
+el("clearFilters").onclick=function(){ state.fltGender=""; state.fltSeek="";
+ el("fltGender").value=""; el("fltSeek").value=""; renderBoard(); };
+Array.prototype.forEach.call(document.querySelectorAll(".sort"),function(b){
+ b.onclick=function(){ state.sort=b.dataset.sort;
+  Array.prototype.forEach.call(document.querySelectorAll(".sort"),function(x){
+   x.setAttribute("aria-pressed",String(x.dataset.sort===state.sort));});
+  renderBoard(); };});
+
+/* ================= row actions ================= */
+el("board").onclick=function(e){
+ var b=e.target.closest("button[data-act]"); if(!b) return;
+ if(b.dataset.act==="clear"){ el("clearFilters").click(); return; }
+ var l=listings.filter(function(x){return x.id===+b.dataset.id;})[0]; if(!l) return;
+ var a=b.dataset.act;
+ if(a==="fancy"){
+  if(state.fanciesLeft<=0){ toast("Five mogs a day, that's your lot. Keeps the line board honest."); return; }
+  if(TOUR.practice){l.fancies++;l.voted=1;state.fanciesLeft--;renderBoard();renderStats();return;}
+  b.disabled=true;
+  fetch("/api/vote",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({listingId:l.id})})
+   .then(function(resp){return resp.json().then(function(d){if(!resp.ok)throw new Error(d.error);return d;});})
+   .then(function(d){l.fancies=d.mogs;l.voted=1;state.fanciesLeft=d.remaining;renderBoard();renderStats();})
+   .catch(function(err){toast(err.message||"Your mog could not be saved.");b.disabled=false;});
+  return; }
+ if(a==="nope"){ l.voted=-1; toast("Noted. They'll never know."); renderBoard(); return; }
+ if(a==="boost"){ openBoost(l); return; }
+ if(a==="mine"){ openMine(l); return; }
+ if(a==="report"){ openReport(l); return; }
+};
+
+/* ================= new listing ================= */
+function fillSpend(){
+ var base=todayPrice(), top=live().reduce(function(m,l){return Math.max(m,l.pence);},0);
+ var opts=[{v:base,t:"Today's price — "+money(base)},{v:base+400,t:"A bit of a push — "+money(base+400)}];
+ if(top+100>base) opts.push({v:top+100,t:"Straight to #1 — "+money(top+100)});
+ el("fSpend").innerHTML=opts.map(function(o){return '<option value="'+o.v+'">'+o.t+"</option>";}).join("");
+ el("payBig").textContent=money(opts[0].v);
+}
+function openNew(){
+ if(!TOUR.practice&&RUNTIME.loaded&&!RUNTIME.publicSubmissionsEnabled){toast("Originle is in preview mode. Public submissions are not open yet.");return;}
+ el("fPlat").innerHTML=PLATFORMS.map(function(p){return '<option value="'+p.id+'">'+p.label+"</option>";}).join("");
+ fillSpend(); el("newErr").textContent=""; el("modalNew").classList.add("open");
+ var sheet=el("modalNew").querySelector(".sheet"); if(sheet) sheet.scrollTop=0;
+}
+el("openNew").onclick=openNew;
+el("fSpend").onchange=function(){ el("payBig").textContent=money(+this.value); };
+el("fPitch").oninput=function(){ el("pitchCount").textContent=this.value.length; };
+function previewHandle(){ var h=el("fHandle").value.trim().replace(/^@/,"");
+ el("handlePrev").textContent=h?plat(el("fPlat").value).pre+h:"\u00a0"; }
+el("fPlat").onchange=function(){ el("fHandle").placeholder=plat(this.value).pre?"username":"yoursite.co.uk"; previewHandle(); };
+el("fHandle").oninput=previewHandle;
+
+el("doAdd").onclick=async function(){
+ var name=el("fName").value.trim(), age=parseInt(el("fAge").value,10),
+     area=el("fArea").value.trim(), country=el("fCountry").value.trim(), pitch=el("fPitch").value.trim(),
+     handle=el("fHandle").value.trim().replace(/^@/,"").replace(/^https?:\/\//,""),
+     link=el("fLink").value.trim(), platId=el("fPlat").value,
+     spend=+el("fSpend").value, gender=el("fGender").value, seek=el("fSeek").value;
+ var E=el("newErr");
+ if(!name||!area||!country||!pitch){ E.textContent="Name, age, town, country and your line are all required."; return; }
+ if(!(age>=18&&age<=99)){ E.textContent="Over 18s only."; return; }
+ if(!handle&&!link){ E.textContent="A handle or a link. Either will do, both is fine, neither isn't."; return; }
+ if(EMAIL_RE.test(pitch)||EMAIL_RE.test(handle)||EMAIL_RE.test(link)){
+  E.textContent="No email addresses. Use a handle or a profile link — you can block someone there, you can't un-send an inbox."; return; }
+ if(PHONE_RE.test(pitch)||(handle&&PHONE_RE.test(handle.replace(/\d{4,}$/,"")))){
+  E.textContent="No phone numbers. Same reason."; return; }
+ if(CONTACT_WORDS.test(pitch)||CONTACT_WORDS.test(link)){
+  E.textContent="Keep messaging apps out of it — link a profile people can look at first."; return; }
+ if(handle&&!HANDLE_OK.test(handle)){ E.textContent="That handle doesn't look right. Letters, numbers, dots and dashes only."; return; }
+ if(link&&!linkOk(link)){ E.textContent="That link won't do. https, a real profile or your own site, nothing shortened."; return; }
+ if(!(el("c1").checked&&el("c2").checked&&el("c3").checked&&el("c4").checked)){
+  E.textContent="All four boxes, please — they're the bit that keeps this legal."; return; }
+
+ var item={id:idc++,gender:gender,seek:seek,name:name,age:age,area:area,country:country,pitch:pitch,
+  plat:handle?platId:null,handle:handle||null,link:link||null,
+  pence:spend,todayPence:spend,fancies:0,seq:9999,mine:true,voted:0,
+  status:"pending",practice:!!TOUR.practice,refNo:ref(),explicitConsent:true,selfDeclaration:true};
+ if(TOUR.practice){
+  el("modalNew").classList.remove("open");
+  toast("Practice submitted. It would now be checked by a moderator. Ref "+item.refNo);
+  if(TOUR.running) TOUR.advanceIf("submit");
+  return;
+ }
+ try{
+  var res=await fetch("/api/checkout",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({kind:"listing",amount:spend,listing:item})});
+  var data=await res.json();
+  if(!res.ok||!data.checkoutUrl) throw new Error(data.message||"Submission failed");
+  window.location.assign(data.checkoutUrl);
+ }catch(err){ E.textContent="We couldn't open secure checkout. Please try again."; }
+};
+
+/* ================= boost ================= */
+function openBoost(l){
+ state.boostId=l.id;
+ var arr=rankedAll(), pos=arr.indexOf(l), above=pos>0?arr[pos-1]:null, top=arr[0];
+ el("boostSub").textContent=l.mine?"You're #"+(pos+1)+" on the board."
+  :"Push "+l.name+" up the page. Anyone can pay for anyone — it's a compliment with a receipt.";
+ var opts=[{v:100,t:"A quid — £1"},{v:500,t:"A fiver — £5"}];
+ if(above) opts.push({v:above.pence-l.pence+100,t:"Just above "+above.name+" — "+money(above.pence-l.pence+100)});
+ if(top!==l) opts.push({v:top.pence-l.pence+100,t:"Straight to #1 — "+money(top.pence-l.pence+100)});
+ el("bAmt").innerHTML=opts.map(function(o){return '<option value="'+o.v+'">'+o.t+"</option>";}).join("");
+ el("boostBig").textContent=money(opts[0].v);
+ el("boostCap").textContent="Keeps the "+money(l.pence)+" already on this listing.";
+ el("boostErr").textContent=""; el("modalBoost").classList.add("open");
+}
+el("bAmt").onchange=function(){ el("boostBig").textContent=money(+this.value); };
+el("doBoost").onclick=function(){
+ var l=listings.filter(function(x){return x.id===state.boostId;})[0], amt=+el("bAmt").value;
+ if(!l||amt<100){ el("boostErr").textContent="Minimum £1."; return; }
+ if(TOUR.practice){
+  l.pence+=amt; l.todayPence+=amt; el("modalBoost").classList.remove("open"); renderAll();
+  toast(l.name+" is now #"+(rankedAll().indexOf(l)+1)+" with "+money(l.pence)+".");
+  if(TOUR.running) TOUR.advanceIf("boost"); return;
+ }
+ el("doBoost").disabled=true;
+ fetch("/api/checkout",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({kind:"boost",amount:amt,listingId:l.id})})
+  .then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.error);return d;});})
+  .then(function(d){window.location.assign(d.checkoutUrl);})
+  .catch(function(err){el("boostErr").textContent=err.message||"Could not open checkout.";el("doBoost").disabled=false;});
+};
+
+/* ================= report ================= */
+function openReport(l){ state.reportId=l.id;
+ el("repSub").textContent="Reporting "+l.name+", "+l.age+" — "+l.area+".";
+ el("repMore").value=""; el("modalReport").classList.add("open"); }
+el("doReport").onclick=function(){
+ var why=el("repWhy").value, r=ref();
+ var urgent=/didn't post it|hasn't consented|under 18|illegal|threat/i.test(why);
+ var l=listings.filter(function(x){return x.id===state.reportId;})[0];
+ if(!l) return;
+ if(TOUR.practice){
+  if(urgent){l.status="down";renderAll();} el("modalReport").classList.remove("open");
+  toast(urgent?"Taken down while we look at it. Ref "+r:"Report logged. A moderator reviews it today. Ref "+r); return;
+ }
+ el("doReport").disabled=true;
+ fetch("/api/report",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({listingId:l.id,reason:why,details:el("repMore").value})})
+  .then(function(resp){return resp.json().then(function(d){if(!resp.ok)throw new Error(d.error);return d;});})
+  .then(function(d){if(d.removedPendingReview){l.status="down";renderAll();}el("modalReport").classList.remove("open");toast("Report received. Ref "+d.reference);})
+  .catch(function(err){toast(err.message||"Report could not be sent.");})
+  .finally(function(){el("doReport").disabled=false;});
+};
+
+/* ================= manage ================= */
+function openMine(l){ state.mineId=l.id;
+ el("mineSub").textContent=l.name+", "+l.age+" — "+money(l.pence)+" paid, #"+(rankedAll().indexOf(l)+1)+" on the board.";
+ el("modalMine").classList.add("open"); }
+el("mineBoost").onclick=function(){ el("modalMine").classList.remove("open");
+ openBoost(listings.filter(function(x){return x.id===state.mineId;})[0]); };
+el("mineDelete").onclick=function(){
+ var l=listings.filter(function(x){return x.id===state.mineId;})[0]; if(!l) return;
+ if(TOUR.practice){l.status="deleted";el("modalMine").classList.remove("open");renderAll();toast("Gone. Listing and handle deleted, nothing kept but the payment record.");return;}
+ var owned; try{owned=JSON.parse(localStorage.getItem("originleManage")||"null");}catch(e){}
+ if(!owned||owned.listingId!==l.id){toast("Open the private management link created after payment to delete this listing.");return;}
+ fetch("/api/manage",{method:"DELETE",headers:{"Content-Type":"application/json","Authorization":"Bearer "+owned.manageToken},body:JSON.stringify({listingId:l.id})})
+  .then(function(resp){return resp.json().then(function(d){if(!resp.ok)throw new Error(d.error);return d;});})
+  .then(function(){l.status="deleted";localStorage.removeItem("originleManage");el("modalMine").classList.remove("open");renderAll();toast("Gone. Your public listing has been deleted.");})
+  .catch(function(err){toast(err.message||"Deletion failed.");}); };
+
+/* ================= legal ================= */
+var LEGAL={
+ terms:{t:"Terms",h:"<h3>What you're buying</h3><p>A position on a public list of one-line pitches, for as long as the list exists. Nothing else. We don't promise messages, matches, dates, clicks or attention. Rank is the total you have paid — that's the entire mechanism, and there is no algorithm behind it.</p><h3>Price</h3><p>A new listing costs £1 on the first day the board is open and £1 more on each day after that. The price you see before you pay is the price you pay. Paying more moves you up; nothing you have paid is ever removed.</p><h3>Cancelling</h3><p>Because your listing goes live as soon as it's approved, you agree to immediate performance and give up the 14-day cancellation right at checkout. If we reject a listing, you're refunded in full. If we take a listing down for breaking the rules, you're not.</p><h3>Deleting</h3><p>You can delete your listing at any moment. Deleting is not a refund.</p><h3>Who can list</h3><p>Over 18s only, listing themselves, using an account they control. Listing anyone else is not allowed and gets removed on sight.</p>"},
+ privacy:{t:"Privacy",h:"<h3>What we hold</h3><ul><li>Your first name, age, town, what you are and who you're looking for, one line, and the handle and/or link you gave us — because you asked us to publish them.</li><li>A Stripe payment reference and the email Stripe collects for your receipt. We never publish it and never market at you.</li><li>Your IP address and a timestamp at the point of posting, kept for 12 months, used only for abuse and fraud.</li></ul><h3>The sensitive bit</h3><p>Saying who you're looking for can indicate your sexual orientation, which is special category data under UK GDPR. We only publish it because you gave explicit consent at checkout, and you can withdraw that consent by deleting your listing, instantly, without asking us.</p><h3>What we don't take</h3><p>No photos. No phone numbers. No email addresses in listings. No location beyond a town you type yourself. No tracking cookies and no ad networks.</p><h3>Your rights</h3><p>Access, correction, deletion, portability, and a complaint to the ICO if we get it wrong. Deletion is a button, not a request form.</p>"},
+ rules:{t:"Community rules",h:"<h3>Yes</h3><ul><li>One line about you, written by you. Yours, not lifted off someone else.</li><li>A handle, a link, or both — for accounts you control and are happy to have looked at.</li><li>Being funny, being dry, being direct.</li></ul><h3>No</h3><ul><li>Anyone under 18, anywhere near this.</li><li>Listing someone else, or a handle that isn't yours.</li><li>Sexual or explicit content, nudity, or anything soliciting sex for money.</li><li>Phone numbers, email addresses, messaging-app links, shortened links.</li><li>Abuse, harassment, threats, hate, or anything aimed at a specific person.</li><li>Scams, catfishing, crypto, adverts, or driving traffic to paid content.</li></ul><h3>How it's enforced</h3><p>Every new line, listing, handle and link is vetted by a moderator before it goes live. Moderators check originality, age and consent concerns, impersonation, prohibited contact details, explicit or abusive content, scams, spam, illegal content and unsafe links. Reports about impersonation, a child or illegal content take the listing down first and are reviewed after. We keep a record of every decision.</p>"},
+ report:{t:"Complaints &amp; takedown",h:"<h3>Reporting</h3><p>Every listing has a report button and you don't need an account to use it. After you report a listing, you receive a reference number so you can identify the case.</p><h3>What happens next</h3><ol><li>Impersonation, under-18 or illegal content: taken down immediately and reviewed by a moderator within hours.</li><li>Everything else: read by a moderator the same day.</li><li>You're told the outcome, and the person listed is told what happened and why.</li></ol><h3>If you're on here and didn't put yourself here</h3><p>Report it and it comes down at once. You don't have to prove anything first.</p><h3>Appeals</h3><p>If your listing was removed and you think that's wrong, reply to the decision and a different moderator will review it.</p>"},
+ who:{t:"Who runs this",h:"<h3>Originle</h3><p>www.originle.co.uk</p><h3>Payments</h3><p>Card payments are handled securely by Stripe. Originle never sees your full card details.</p>"}
+};
+function renderLegal(){
+ el("legaltabs").innerHTML=Object.keys(LEGAL).map(function(k){
+  return '<button class="ltab" data-l="'+k+'" aria-selected="'+(k===state.legal)+'">'+LEGAL[k].t+"</button>";}).join("");
+ el("legalBody").innerHTML=LEGAL[state.legal].h;
+}
+Array.prototype.forEach.call(document.querySelectorAll("[data-legal]"),function(b){
+ b.onclick=function(){ state.legal=b.dataset.legal; renderLegal(); el("modalLegal").classList.add("open"); };});
+el("legaltabs").onclick=function(e){ var b=e.target.closest(".ltab"); if(!b) return;
+ state.legal=b.dataset.l; renderLegal(); };
+
+/* ================= modal plumbing ================= */
+Array.prototype.forEach.call(document.querySelectorAll("[data-close]"),function(b){
+ b.onclick=function(){ b.closest(".modal").classList.remove("open"); };});
+Array.prototype.forEach.call(document.querySelectorAll(".modal"),function(m){
+ m.addEventListener("click",function(e){ if(e.target===m) m.classList.remove("open"); });});
+function syncModalLock(){ document.body.classList.toggle("modal-open",!!document.querySelector(".modal.open")); }
+var modalObserver=new MutationObserver(syncModalLock);
+Array.prototype.forEach.call(document.querySelectorAll(".modal"),function(m){
+ modalObserver.observe(m,{attributes:true,attributeFilter:["class"]});
+});
+document.addEventListener("keydown",function(e){ if(e.key==="Escape"){
+ Array.prototype.forEach.call(document.querySelectorAll(".modal.open"),function(m){m.classList.remove("open");});
+ if(TOUR.running) TOUR.stop();
+}});
+
+/* ============================================================
+   WALK-THROUGH — a guided tour of the board.
+   Rule one, learned the hard way on Idiomle: no step can ever trap
+   anyone. Next always works, Back always works, Skip always works,
+   Escape always works. Optional actions are invitations, not gates.
+   ============================================================ */
+var TOUR=(function(){
+ var running=false, practice=false, i=0, cleanup=null;
+
+ var STEPS=[
+  {title:"This is a walk-through",
+   text:"This is a practice walk-through. Nothing costs money here, no card is requested and nothing you do is published. The live Originle business will charge for listings. <b>Next</b>, <b>Back</b> and <b>Skip</b> always work."},
+
+  {target:"#t-clock", title:"The price goes up every day",
+   text:"The main page shows the current <b>Originle day</b>. A listing costs that day number in pounds: day one is £1 and day ten is £10. The clock counts down to the next rise."},
+
+  {target:"#board li.row:first-child", title:"The line",
+   text:"There are no photos here. You see <b>one original, attractive, creative or funny line</b>, followed by the person’s details. Their words have to do all the work."},
+
+  {target:"#board li.row:first-child .coins", title:"What the numbers mean",
+   text:"<b>Board total</b> is everything paid towards that listing. <b>Added today</b> is today's contribution. <b>Mogs</b> are votes for the line itself. The highest board total sits top; ties go to whoever arrived first."},
+
+  {target:"#board li.row:first-child .contacts", title:"How you reach them",
+   text:"A handle, a link, or both. <b>No phone numbers and no email addresses.</b>"},
+
+  {target:"#t-filters", title:"One list, your slice of it",
+   text:"Everyone is on the same board. These two dropdowns pick out who you actually want to see. The rank number never changes with the filter — <b>#4 means fourth on the whole site</b>, not fourth of the four you're looking at."},
+
+  {target:"#t-sorts", title:"Two boards, two ways to win",
+   text:"<b>All time</b> and <b>Today</b> are ranked by money. <b>Most Mogged</b> is ranked only by votes for the line and is included with the original listing fee."},
+
+  {target:"#board li.row:first-child .acts", title:"Mog it, boost it, report it",
+   text:"<b>Mog this</b> votes for the line — five per visitor each day. <b>Boost them</b> lets anyone pay towards a listing and move it higher: choose an amount, see the new position, then confirm through Stripe. <b>Report</b> is on every row and needs no account."},
+
+  {action:"boost", target:"#board li.row:first-child .acts", title:"Have a go",
+   text:"Press <b>Boost them</b> on any row and pick an amount. Nothing is charged. Or just press Next — this bit is optional."},
+
+  {target:"#openNew", title:"Getting yourself on",
+   text:"Name, age, town, what you are, who you want, <b>your line</b>, and a handle or a link. That's the whole form. Then you pay a quid and wait for a person to read it."},
+
+  {action:"submit", target:"#openNew", title:"Try a practice listing",
+   text:"Press <b>Get on the board</b> and fill it in — I've pre-filled it, so you can just scroll down, tick the four boxes and pay. It's practice: no card, and it vanishes when you leave."},
+
+  {target:"#openNew", title:"Vetted before publication",
+   text:"A new submission enters the <b>listing moderation queue</b>, which is private and only available to Originle moderators. They check originality, ownership and consent, prohibited contact details, explicit or abusive content, scams, spam, illegal content and unsafe links. Only an approved listing reaches the public board."},
+
+  {target:"#board li.row:first-child", title:"And you're on",
+   text:"Your line sits at whatever rank your money bought — and climbs the <b>Best lines</b> board for free if people like it. Pay more to move up, delete it in one click whenever you've had enough. That's the whole site."}
+ ];
+
+ function q(sel){ try{ return document.querySelector(sel); }catch(e){ return null; } }
+
+ var reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+ var activeTarget=null, placeTimer=null;
+
+ /* #spot lives inside a position:fixed parent, so it takes VIEWPORT coordinates.
+    Adding scrollY (the old bug) threw the hole off-screen once the page had
+    scrolled, leaving a full-screen black shadow with no hole in it. */
+ function paint(){
+  if(!running) return;
+  var spot=el("spot"), card=el("tourCard");
+  var vh=window.innerHeight, vw=window.innerWidth;
+  var ch=card.offsetHeight||190;   // measured only after the card is visible
+
+  if(!activeTarget || !document.body.contains(activeTarget)){
+   spot.style.display="none";
+   card.style.top=Math.max(12,(vh-ch)/2)+"px";
+   return;
+  }
+  var r=activeTarget.getBoundingClientRect();
+  if(!r.width && !r.height){ spot.style.display="none"; card.style.top=Math.max(12,(vh-ch)/2)+"px"; return; }
+
+  /* Clamp to the viewport. A target taller than the screen (the whole board,
+     say) would otherwise push the card hundreds of pixels below the fold. */
+  var top=Math.max(6,Math.min(r.top-6,vh-40));
+  var left=Math.max(6,Math.min(r.left-6,vw-40));
+  var h=Math.max(24,Math.min(r.height+12,vh-top-6));
+  var w=Math.max(24,Math.min(r.width+12,vw-left-6));
+  spot.style.display="block";
+  spot.style.top=top+"px"; spot.style.left=left+"px";
+  spot.style.width=w+"px"; spot.style.height=h+"px";
+
+  var below=top+h+16, above=top-ch-16;
+  var y = (below+ch<=vh-12) ? below : (above>=12 ? above : Math.max(12,vh-ch-12));
+  card.style.top=y+"px";
+ }
+
+ function place(step){
+  var dim=el("tourDim"), card=el("tourCard");
+  dim.classList.add("on"); card.classList.add("on");   // show first, then measure
+  activeTarget = step.target ? q(step.target) : null;
+  clearTimeout(placeTimer);
+  paint();                                             // never leave a hole-less dim
+  if(activeTarget){
+   activeTarget.scrollIntoView({block:"center",behavior:reduced?"auto":"smooth"});
+   placeTimer=setTimeout(paint, reduced?0:300);        // repaint once scrolling settles
+  }
+ }
+
+ function show(){
+  var s=STEPS[i];
+  el("tourStep").textContent="Step "+(i+1)+" of "+STEPS.length;
+  el("tourTitle").textContent=s.title;
+  el("tourText").innerHTML=s.text;
+  el("tourBack").disabled=false;
+  el("tourNext").textContent=(i===STEPS.length-1)?"Done":"Next";
+  place(s);
+ }
+
+ function next(){ if(i<STEPS.length-1){ i++; show(); } else stop(); }
+ function back(){ if(i>0){ i--; show(); } }
+
+ /* An optional action moves things along if the person does it —
+    but Next is always right there if they'd rather not. */
+ function advanceIf(action){
+  if(!running) return;
+  if(STEPS[i] && STEPS[i].action===action) setTimeout(next,700);
+ }
+
+ function prefill(){
+  el("fName").value="Sam"; el("fAge").value="31"; el("fArea").value="Rainham"; el("fCountry").value="UK";
+  el("fGender").value="m"; el("fSeek").value="w";
+  el("fPitch").value="Practice listing. Owns three kettles and can explain why.";
+  el("fPitch").dispatchEvent(new Event("input"));
+  el("fPlat").value="instagram"; el("fHandle").value="practice.account";
+  el("fHandle").dispatchEvent(new Event("input"));
+  el("fLink").value="";
+ }
+
+ function start(){
+  running=true; practice=true; i=0;
+  listings=practiceSeed.map(function(l){return Object.assign({},l,{voted:0,status:"live",practice:true});});
+  el("practiceTicker").hidden=false;
+  el("pribbon").classList.add("on");
+  prefill();
+  el("newPracticeBanner").hidden=false;
+  renderAll();
+  show();
+ }
+
+ function stop(){
+  var wasRunning=running;
+  running=false;
+  clearTimeout(placeTimer);
+  activeTarget=null;
+  /* Belt and braces: clear the classes AND the inline styles, so a half-painted
+     spotlight can never survive the tour ending. */
+  el("tourDim").classList.remove("on");
+  el("tourCard").classList.remove("on");
+  el("spot").style.display="none";
+  el("spot").removeAttribute("style");
+  try{ if(practice) endPractice(); }
+  catch(err){ console.error("practice cleanup failed",err); }
+  if(wasRunning){
+   window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});
+   toast("That's the lot. Write a good line and it's a quid to get on.");
+  }
+ }
+
+ function endPractice(){
+  practice=false;
+  el("pribbon").classList.remove("on");
+  el("practiceTicker").hidden=true;
+  el("newPracticeBanner").hidden=true;
+  listings=[];
+  if(liveCache.length) listings=liveCache.slice();
+  renderAll();
+  loadLiveListings();
+ }
+
+ return {
+  get running(){ return running; },
+  get practice(){ return practice; },
+  start:start, stop:stop, next:next, back:back, advanceIf:advanceIf, endPractice:endPractice,
+  refresh:function(){ if(running) paint(); }
+ };
+})();
+
+el("startTour").onclick=TOUR.start;
+el("tourNext").onclick=TOUR.next;
+el("tourBack").onclick=TOUR.back;
+el("tourSkip").onclick=TOUR.stop;
+el("endPractice").onclick=function(){ TOUR.stop(); toast("Practice cleared. The board is back to normal."); };
+window.addEventListener("resize",function(){ TOUR.refresh(); });
+window.addEventListener("scroll",function(){ TOUR.refresh(); },{passive:true});
+if(window.visualViewport){ window.visualViewport.addEventListener("resize",function(){ TOUR.refresh(); }); }
+
+/* ================= go ================= */
+function loadLiveListings(){
+ return fetch("/api/listings?sort=paid",{headers:{"Accept":"application/json"}})
+  .then(function(resp){if(!resp.ok)throw new Error("API unavailable");return resp.json();})
+  .then(function(data){
+   var owned; try{owned=JSON.parse(localStorage.getItem("originleManage")||"null");}catch(e){}
+   var fresh=(data.listings||[]).map(function(l,i){l.seq=i;l.voted=0;l.mine=!!(owned&&owned.listingId===l.id);l.practice=false;return l;});
+   liveCache=fresh;
+   if(TOUR.practice) return;
+   listings=fresh;
+   renderAll();
+  }).catch(function(){/* Keep the invented preview rows when this file is opened without its API. */});
+}
+function loadRuntimeConfig(){
+ return fetch("/api/config",{headers:{"Accept":"application/json"}}).then(function(resp){if(!resp.ok)throw new Error();return resp.json();}).then(function(c){
+  RUNTIME.serverPrice=c.listingPrice;RUNTIME.publicSubmissionsEnabled=!!c.publicSubmissionsEnabled;RUNTIME.paymentsEnabled=!!c.paymentsEnabled;RUNTIME.loaded=true;
+  if(c.launchDate){LAUNCH=new Date(c.launchDate+"T00:00:00");LAUNCH.setHours(0,0,0,0);} renderClock();
+  if(!RUNTIME.publicSubmissionsEnabled){el("openNew").textContent="Preview only";} else {el("openNew").textContent="Get on the board →";}
+ }).catch(function(){/* Static-file practice mode has no runtime API. */});
+}
+function recoverCheckout(){
+ var params=new URLSearchParams(location.search), sessionId=params.get("session_id");
+ if(!sessionId) return;
+ var attempts=0;
+ function poll(){
+  attempts++;
+  fetch("/api/checkout-session?session_id="+encodeURIComponent(sessionId))
+   .then(function(resp){return resp.json().then(function(d){return {ok:resp.ok,status:resp.status,data:d};});})
+   .then(function(x){
+    if(x.status===202&&attempts<10){setTimeout(poll,1200);return;}
+    if(x.ok&&x.data.manageToken){
+     localStorage.setItem("originleManage",JSON.stringify(x.data));
+     toast("Payment received. Your listing is now in the private moderation queue."); loadLiveListings();
+    } else if(attempts>=10){toast("Payment received. Moderation details are still processing; refresh shortly.");}
+   }).catch(function(){if(attempts<10)setTimeout(poll,1200);});
+ }
+ poll();
+ if(history.replaceState) history.replaceState({},document.title,location.pathname);
+}
+renderTicker(); renderClock(); renderAll(); renderLegal(); loadRuntimeConfig(); loadLiveListings(); recoverCheckout();
+setInterval(renderClock,1000);
+})();
+</script>
+</body>
+</html>
